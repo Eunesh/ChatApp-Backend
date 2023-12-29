@@ -14,7 +14,7 @@ class User < ApplicationRecord
 
   after_create :generate_otp
 
-  delegate :otp_key, to: :otp
+  delegate :otp_key, :expired_at, to: :otp
 
   def confirm!
     update_columns(confirmed_at: Time.current) # update_column is used to update certain columns in table
