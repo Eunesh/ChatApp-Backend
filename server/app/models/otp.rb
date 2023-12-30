@@ -4,6 +4,7 @@ class Otp < ApplicationRecord
   belongs_to :user
   before_create :generate_otp
   after_update :send_otp!
+  after_create :send_otp!
 
   delegate :email, to: :user
 

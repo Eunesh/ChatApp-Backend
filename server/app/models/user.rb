@@ -24,10 +24,6 @@ class User < ApplicationRecord
     confirmed_at.present? # Checking if confirmed_at column is null or not
   end
 
-  def unconfirmed?
-    !cofirmed?
-  end
-
   # signed in method is used to generate a cryptographically signed identifier
   def generate_confirmation_token
     signed_id expires_in: CONFIRMATION_TOKEN_EXPIRATION, purpose: :confirm_email

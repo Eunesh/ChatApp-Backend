@@ -1,7 +1,4 @@
-class ApplicationController < ActionController::API
-  include ::ActionController::Cookies # For accessing cookies
-
-  # For creating jwt token
+module JwtService
   def encode(payload)
     secret_key = ENV['SECRET_KEY']
     return nil unless secret_key
@@ -9,7 +6,6 @@ class ApplicationController < ActionController::API
     JWT.encode(payload, secret_key, 'HS256')
   end
 
-  # For Decoding token
   def decode(token)
     secret_key = ENV['SECRET_KEY']
     return nil unless secret_key

@@ -12,7 +12,6 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      @user.otp.send_otp! # Sending Otp
       render json: @user, status: :created
     else
       render json: @user.errors

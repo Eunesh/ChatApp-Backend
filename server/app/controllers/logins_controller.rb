@@ -1,3 +1,4 @@
+
 class LoginsController < ApplicationController
   before_action :set_user, only: %i[user_login]
 
@@ -7,6 +8,10 @@ class LoginsController < ApplicationController
     return render json: { error: 'incorrect password' } unless @user.authenticate(login_params[:password])
 
     return render json: { error: 'Unconfirmed account' } unless @user.confirmed?
+
+    created_jwt = encode(@user.id)
+
+    cookies.signed[:user_jwt] = { value: created_jwt, httponly: true }  # Sending httponly cookie
 
     render json: { user: 'User exists' }, status: :ok
   end
