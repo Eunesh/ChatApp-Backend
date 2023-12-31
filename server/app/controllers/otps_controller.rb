@@ -9,7 +9,11 @@ class OtpsController < ApplicationController
 
   # POST /verify_otp
   def verify_otp
-    return @user.confirm! if @user&.otp_key == otp_params[:otp] && expire_date_checker(@user&.expired_at)
+    if @user&.otp_key == otp_params[:otp] && expire_date_checker(@user&.expired_at)
+      @user.confirm!
+      render json: { message: 'User is confirmed' }, status: :ok
+      return
+    end
 
     render json: { error: 'Invalid or Expired Otp ' }, status: :unprocessable_entity
   end
@@ -20,9 +24,10 @@ class OtpsController < ApplicationController
 
   # PATCH  /reload_otp
   def reload_otp
-    return @user.otp.update_otp! unless @user.confirmed? # Again Updating new otp
+    return render json: { error: 'User is already confirmed' }, status: :unprocessable_entity if @user.confirmed?
 
-    render json: { error: 'Your account is already confirmed' }, status: :not_acceptable
+    @user.otp.update_otp!
+    render json: { message: 'OTP updated successfully' }, status: :ok
   end
 
   private
