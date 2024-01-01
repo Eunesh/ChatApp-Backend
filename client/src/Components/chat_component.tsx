@@ -1,11 +1,20 @@
 import { Avatar, Button } from "@mui/material";
-import { MouseEventHandler } from "react";
+import useAuthChecker from "../Hook/useAuthChecker";
+import http from "../AxiosInstance/http";
 
 export default function Component() {
-  function ClickContact(): MouseEventHandler<HTMLSpanElement> | undefined {
-    return;
+  async function ClickLogout() {
+    try {
+      const res = await http.delete("/logout");
+      console.log(res.status);
+      if (res.status === 200) {
+        alert("logout");
+      }
+    } catch (err) {
+      alert("LogOut failed");
+    }
   }
-
+  useAuthChecker(); // Hook for checking if user is authenticate or not
   return (
     <div className="grid grid-cols-[300px_1fr] h-screen">
       <aside className="border-r dark:border-gray-700 bg-white dark:bg-gray-950 p-4">
@@ -17,13 +26,16 @@ export default function Component() {
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <Avatar className="h-10 w-10"></Avatar>
-              <span className="font-medium" onClick={ClickContact()}>
-                Contact 1
-              </span>
+              <span className="font-medium cursor-pointer">Contact 1</span>
             </div>
             <div className="flex items-center space-x-3">
               <Avatar className="h-10 w-10"></Avatar>
               <span className="font-medium">Contact 2</span>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Button className="" onClick={ClickLogout}>
+                Logout
+              </Button>
             </div>
           </div>
         </div>

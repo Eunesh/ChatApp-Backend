@@ -25,6 +25,7 @@ export default function LoginComponent() {
     console.log("Login data:", loginData);
     try {
       const res = await http.post("/user_login", loginData);
+      console.log(res);
       console.log(res.status);
       if (res.status) {
         navigate("/chat");
