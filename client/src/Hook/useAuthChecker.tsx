@@ -6,7 +6,7 @@ const useAuthChecker = () => {
   async function AuthChecker() {
     try {
       const res = await http.get("/is_auth");
-      console.log(res.status);
+      localStorage.setItem("user_id", res.data.user_id); // localStorage.getItem("user_id");
       if (res.status !== 200) {
         const error = new Error("You are not Authorized");
         throw error;
