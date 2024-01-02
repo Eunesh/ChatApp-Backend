@@ -1,4 +1,4 @@
-class OtpsController < ApplicationController
+class Api::OtpsController < ApplicationController
   before_action :set_user, only: %i[verify_otp reload_otp]
 
   # GET /otps

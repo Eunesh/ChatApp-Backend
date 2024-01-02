@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class Api::UsersController < ApplicationController
   # Emty method for views
   def home; end
 

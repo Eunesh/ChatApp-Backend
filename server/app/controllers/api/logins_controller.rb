@@ -1,4 +1,4 @@
-class LoginsController < ApplicationController
+class Api::LoginsController < ApplicationController
   before_action :set_user, only: %i[user_login]
 
   # POST  /user_login
@@ -11,7 +11,7 @@ class LoginsController < ApplicationController
 
     return render json: { error: 'Unconfirmed account' }, status: :not_acceptable unless @user.confirmed?
 
-    created_jwt = encode(@user.id)
+    created_jwt = encode(@user.id.to_s)
 
     cookies.signed[:user_jwt] = { value: created_jwt, httponly: true } # Sending httponly cookie
 
