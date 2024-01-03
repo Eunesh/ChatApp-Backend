@@ -5,7 +5,10 @@ class Messg < ApplicationRecord
   after_create_commit :broadcaster
 
   def broadcaster
-    ActionCable.server.broadcast("chat_#{recipient_id}", '')
-    ActionCable.server.broadcast("chat_#{recipient_id}#{sender_id}", message)
+    ActionCable.server.broadcast(reciever_id, { message: })
+  end
+
+  def self.find_messages(sender, receiver)
+    Messg.where(sender_id: sender, reciever_id: receiver).order(created_at: :asc)
   end
 end

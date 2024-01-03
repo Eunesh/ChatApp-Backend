@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   root 'users#home'
-  mount ActionCable.server => '/chats'
+  mount ActionCable.server => '/chats' # For websocket
 
   namespace :api do
     resources :users
@@ -11,5 +11,6 @@ Rails.application.routes.draw do
     delete '/logout', to: 'auths#logout'
     get '/is_auth', to: 'auths#auth?'
     post '/create_message', to: 'messages#create_message'
+    get '/specific_message/:sender_id/:receiver_id', to: 'messages#specific_message', as: 'specific_message'
   end
 end
