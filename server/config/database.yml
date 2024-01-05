@@ -9,14 +9,15 @@ default: &default
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
-  # host: vdb.qmcadtznpsdsptrkykmz.supabase.co
-  # username: postgres
-  # password: ChatApp!23456789
-  url: postgresql://postgres:ChatApp!23456789@db.qmcadtznpsdsptrkykmz.supabase.co:5432/
+  pool: 5
+  host: localhost
+  username: unesh
+  password:
+  # url: postgresql://postgres:ChatApp!23456789@db.qmcadtznpsdsptrkykmz.supabase.co:5432/
 
 development:
   <<: *default
-  database: chat_app_development
+  database: chat_app
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -27,4 +28,4 @@ test:
 
 production:
   <<: *default
-  database: chat_app_production
+  database: chat_app

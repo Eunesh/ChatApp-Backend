@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     post '/user_login', to: 'logins#user_login'
     delete '/logout', to: 'auths#logout'
     get '/is_auth', to: 'auths#auth?'
-    post '/create_message', to: 'messages#create_message'
-    get '/specific_message/:sender_id/:receiver_id', to: 'messages#specific_message', as: 'specific_message'
+    post '/create_message', to: 'messages#create_message' # resource
+    get '/specific_message/:sender/:receiver', to: 'messages#specific_message', as: 'specific_message'
   end
 end

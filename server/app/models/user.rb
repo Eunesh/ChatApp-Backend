@@ -6,7 +6,7 @@ class User < ApplicationRecord
 
   has_secure_password # For hashing password with bcrypt on password_digest column
 
-  before_save :downcase_email # For hashing password with bcrypt on password_digest column
+  before_save :downcase_email # For downcasing email before saving in database
 
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, presence: true, uniqueness: true
 
@@ -24,9 +24,8 @@ class User < ApplicationRecord
     confirmed_at.present? # Checking if confirmed_at column is null or not
   end
 
-  # signed in method is used to generate a cryptographically signed identifier
-  def generate_confirmation_token
-    signed_id expires_in: CONFIRMATION_TOKEN_EXPIRATION, purpose: :confirm_email
+  def expire_date_checker(expired_at_date)
+    Time.current < expired_at_date
   end
 
   private

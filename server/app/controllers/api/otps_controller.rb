@@ -9,17 +9,13 @@ class Api::OtpsController < ApplicationController
 
   # POST /verify_otp
   def verify_otp
-    if @user&.otp_key == otp_params[:otp] && expire_date_checker(@user&.expired_at)
+    if @user.otp_key == otp_params[:otp] && @user.expire_date_checker(@user.expired_at)
       @user.confirm!
       render json: { message: 'User is confirmed' }, status: :ok
       return
     end
 
     render json: { error: 'Invalid or Expired Otp ' }, status: :unprocessable_entity
-  end
-
-  def expire_date_checker(expired_at_date)
-    Time.current < expired_at_date
   end
 
   # PATCH  /reload_otp

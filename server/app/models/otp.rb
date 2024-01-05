@@ -19,7 +19,7 @@ class Otp < ApplicationRecord
 
   # For updating otp
   def update_otp!
-    update(otp_key: random_number_generator, expired_at: Time.now + EXPIRATION_TIME)
+    update(otp_key: random_number_generator, expired_at: Time.current + EXPIRATION_TIME)
   end
 
   def random_number_generator
@@ -30,6 +30,6 @@ class Otp < ApplicationRecord
 
   def generate_otp
     self.otp_key = random_number_generator
-    self.expired_at = Time.now + EXPIRATION_TIME
+    self.expired_at = Time.current + EXPIRATION_TIME
   end
 end
