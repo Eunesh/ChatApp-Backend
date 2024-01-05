@@ -50,7 +50,7 @@ export default function SignupComponent() {
     <main className="flex items-center justify-center bg-gray-100 h-screen">
       <Card className="bg-white shadow-2xl rounded-lg w-96">
         <h1 className="text-4xl font-mono text-gray-800 border-b-4 border-l-black pb-2 text-center">
-          Sign up
+          Sign up, Simple Chat App
         </h1>
         <CardHeader className="bg-[#f5f5f5] rounded-t-lg p-4">
           <h2 className="text-3xl font-bold text-center">Sign Up</h2>

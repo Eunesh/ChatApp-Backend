@@ -20,12 +20,6 @@ export default function OtpComponent() {
     setOtp(e.target.value);
   };
 
-  // function for calling APi endpoint with axios for post
-  //   async function postResponse(url: string, data: Iotp) {
-  //     const res = await http.post(url, data);
-  //     return res;
-  //   }
-
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     // You can use the otpValue in your form submission logic
