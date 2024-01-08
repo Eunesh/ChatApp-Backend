@@ -12,5 +12,6 @@ Rails.application.routes.draw do
     get '/is_auth', to: 'auths#auth?'
     post '/create_message', to: 'messages#create_message' # resource
     get '/specific_message/:sender/:receiver', to: 'messages#specific_message', as: 'specific_message'
+    post 'upload_image', to: 'messages#upload_image'
   end
 end

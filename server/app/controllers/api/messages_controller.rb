@@ -13,17 +13,13 @@ class Api::MessagesController < ApplicationController
 
   # GET /specific_message/:sender/:receiver
   def specific_message
-    sender = params[:sender]
-    receiver = params[:receiver]
-    messages = Messg.find_messages(sender, receiver)
-    # return render json: { error: 'Error occured while finding message' }, status: :not_found unless messages.present?
-
+    messages = Messg.find_messages(params[:sender], params[:receiver])
     render json: messages, status: :ok
   end
 
   private
 
   def message_params
-    params.permit(:message, :sender_id, :reciever_id)
+    params.permit(:message, :sender_id, :reciever_id, :image)
   end
 end
