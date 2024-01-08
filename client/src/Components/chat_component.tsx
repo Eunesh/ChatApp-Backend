@@ -1,6 +1,5 @@
 import { Button, Input } from "@mui/material";
 import useAuthChecker from "../Hook/useAuthChecker";
-import http from "../AxiosInstance/http";
 import { SetStateAction, useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
 import { SmileIcon, SendIcon, FileInputIcon } from "lucide-react";
@@ -8,11 +7,12 @@ import SideBar from "./SideBar";
 import SenderChatMessage from "./senderChatMessage";
 import RecieverChatMessage from "./recieverChatMessage";
 import ChatHistory from "./chat_history";
+import { http_for_files } from "../AxiosInstance/http";
 
 export default function Component() {
   const { cable } = useContext(GlobalContext);
 
-  const user_id = localStorage.getItem("user_id");
+  const user_id: any = localStorage.getItem("user_id");
 
   const [inputValue, setInputValue] = useState("");
 
@@ -20,15 +20,22 @@ export default function Component() {
 
   const [receivingMessage, setReceivingMessage] = useState<any>([]);
 
-  const recipient_id = localStorage.getItem("recipient_id");
+  const recipient_id: any = localStorage.getItem("recipient_id");
 
-  const [file, setFile] = useState<File | null | Blob>(null); // Use State for Image
+  const [file, setFile] = useState<Blob | string>("");
 
-  const message = {
-    sender_id: user_id,
-    reciever_id: recipient_id,
-    message: inputValue,
-  };
+  const fd = new FormData();
+
+  fd.append("image", file);
+  fd.append("sender_id", user_id);
+  fd.append("reciever_id", recipient_id);
+  fd.append("message", inputValue);
+
+  // const message = {
+  //   sender_id: user_id,
+  //   reciever_id: recipient_id,
+  //   message: inputValue,
+  // };
 
   useAuthChecker(); // Hook for checking if user is authenticate or not
 
@@ -48,8 +55,9 @@ export default function Component() {
     }
 
     try {
-      const res = await http.post("/create_message", message);
+      const res = await http_for_files.post("/create_message", fd);
       if (res.status === 200) {
+        setFile("");
       }
     } catch {
       alert("Please dont Leaver your Message Field empty");
@@ -57,12 +65,12 @@ export default function Component() {
   }
 
   // For Stroing image on SetImage UseState
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null;
-    setFile(file ? file : null);
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const image: any = e.target.files ? e.target.files[0] : null;
+    setFile(image ? image : null);
   };
 
-  console.log(file);
+  // console.log(file);
   // For creating subscription to chat
   useEffect(() => {
     console.log(user_id);
@@ -74,11 +82,15 @@ export default function Component() {
       {
         // When Server send some data
         received: (data: any) => {
-          setReceivingMessage((state: any) => [...state, data.message]);
+          // console.log(data);
+          setReceivingMessage((state: any) => [...state, data]);
         },
       }
     );
   }, [recipient_id, user_id]);
+
+  console.log(receivingMessage);
+  console.log(file);
 
   return (
     <div className="grid grid-cols-[300px_1fr] h-screen static">
@@ -88,11 +100,19 @@ export default function Component() {
         <div className="flex-1 p-4 space-y-4">
           {/* Sender messages (right-aligned) */}
           {messages.map((message: any, index: number) => (
-            <SenderChatMessage message={message.text} index={index} />
+            <SenderChatMessage
+              message={message.text}
+              index={index}
+              image={""}
+            />
           ))}
           {/* Receiver messages (left-aligned) */}
           {receivingMessage.map((message: any, index: number) => (
-            <RecieverChatMessage message={message} index={index} />
+            <RecieverChatMessage
+              message={message.message}
+              index={index}
+              image={message.image.image}
+            />
           ))}
         </div>
 

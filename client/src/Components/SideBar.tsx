@@ -17,6 +17,7 @@ const SideBar = () => {
       if (res.status === 200) {
         alert("logout");
         localStorage.setItem("user_id", "");
+        localStorage.setItem("recipient_id", "");
         navigate("/chat");
       }
     } catch (err) {

@@ -1,6 +1,7 @@
 interface propsType {
   message: string;
   index: number;
+  image: string | null;
 }
 
 const SenderChatMessage = (props: propsType) => {
@@ -11,6 +12,7 @@ const SenderChatMessage = (props: propsType) => {
           <span className="px-4 py-2 rounded-full inline-block rounded-br-none bg-blue-600 text-white">
             {props.message}
           </span>
+          {props.image && <img src={`http://localhost:3001/${props.image}`} />}
         </div>
         <span className="text-sm text-gray-500">You, 3:58 PM</span>
       </div>

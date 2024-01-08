@@ -29,11 +29,19 @@ const ChatHistory = () => {
       {ChatHistory.map((chatMessage: any, index: number) => {
         if (chatMessage.sender_id == user_id) {
           return (
-            <SenderChatMessage message={chatMessage.message} index={index} />
+            <SenderChatMessage
+              message={chatMessage.message}
+              index={index}
+              image={chatMessage.image}
+            />
           );
         } else if (chatMessage.reciever_id == user_id) {
           return (
-            <RecieverChatMessage message={chatMessage.message} index={index} />
+            <RecieverChatMessage
+              message={chatMessage.message}
+              index={index}
+              image={chatMessage.image}
+            />
           );
         }
       })}

@@ -8,4 +8,11 @@ const http = axios.create({
   withCredentials: true,
 });
 
+export const http_for_files = axios.create({
+  baseURL: "http://localhost:3001/api",
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+  withCredentials: true,
+});
 export default http;
