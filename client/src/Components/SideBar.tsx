@@ -17,7 +17,7 @@ const SideBar = () => {
       if (res.status === 200) {
         alert("logout");
         localStorage.setItem("user_id", "");
-        localStorage.setItem("recipient_id", "");
+        localStorage.removeItem("recipient_id");
         navigate("/chat");
       }
     } catch (err) {
@@ -27,7 +27,7 @@ const SideBar = () => {
 
   function Recieve(id: string) {
     localStorage.setItem("recipient_id", id);
-    navigate("/chat");
+    location.reload();
   }
 
   const others_users_except_yourself: any = users.filter(
@@ -50,28 +50,30 @@ const SideBar = () => {
   }, [setUsers]);
 
   return (
-    <aside className="border-r dark:border-gray-700 bg-white dark:bg-gray-950 p-4">
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold">Contacts</h2>
-        </div>
+    <div className="h-screen relative w-64 border-r dark:border-gray-700">
+      <aside className="bg-white dark:bg-gray-9502 p-4 fixed h-full">
         <div className="space-y-4">
-          {others_users_except_yourself.map((contact: any, index: number) => (
-            <div
-              key={index}
-              className="flex items-center space-x-3 hover:bg-gray-200 rounded-lg cursor-pointer p-3"
-              onClick={() => Recieve(contact.id)}
-            >
-              <Avatar className="h-10 w-10"></Avatar>
-              <span className="font-medium">{contact.name}</span>
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-bold">Contacts</h2>
+          </div>
+          <div className="space-y-4">
+            {others_users_except_yourself.map((contact: any, index: number) => (
+              <div
+                key={index}
+                className="flex items-center space-x-3 hover:bg-gray-200 rounded-lg cursor-pointer p-3"
+                onClick={() => Recieve(contact.id)}
+              >
+                <Avatar className="h-10 w-10"></Avatar>
+                <span className="font-medium">{contact.name}</span>
+              </div>
+            ))}
+            <div className="flex items-center space-x-3">
+              <Button onClick={ClickLogout}>Logout</Button>
             </div>
-          ))}
-          <div className="flex items-center space-x-3">
-            <Button onClick={ClickLogout}>Logout</Button>
           </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+    </div>
   );
 };
 

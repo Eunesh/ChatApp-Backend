@@ -7,6 +7,7 @@ import SideBar from "./SideBar";
 import SenderChatMessage from "./senderChatMessage";
 import RecieverChatMessage from "./recieverChatMessage";
 import ChatHistory from "./chat_history";
+import ChatHeader from "./ChatHeader";
 import { http_for_files } from "../AxiosInstance/http";
 
 export default function Component() {
@@ -22,20 +23,7 @@ export default function Component() {
 
   const recipient_id: any = localStorage.getItem("recipient_id");
 
-  const [file, setFile] = useState<Blob | string>("");
-
-  const fd = new FormData();
-
-  fd.append("image", file);
-  fd.append("sender_id", user_id);
-  fd.append("reciever_id", recipient_id);
-  fd.append("message", inputValue);
-
-  // const message = {
-  //   sender_id: user_id,
-  //   reciever_id: recipient_id,
-  //   message: inputValue,
-  // };
+  const [file, setFile] = useState<Array<any>>([]);
 
   useAuthChecker(); // Hook for checking if user is authenticate or not
 
@@ -46,6 +34,15 @@ export default function Component() {
   };
 
   async function handleSendClick() {
+    const fd = new FormData();
+
+    fd.append("sender_id", user_id);
+    fd.append("reciever_id", recipient_id);
+    fd.append("message", inputValue);
+
+    file.forEach((file) => {
+      fd.append("images[]", file);
+    });
     if (inputValue.trim() !== "") {
       const newMessage = {
         text: inputValue,
@@ -57,7 +54,7 @@ export default function Component() {
     try {
       const res = await http_for_files.post("/create_message", fd);
       if (res.status === 200) {
-        setFile("");
+        setFile([]);
       }
     } catch {
       alert("Please dont Leaver your Message Field empty");
@@ -66,15 +63,16 @@ export default function Component() {
 
   // For Stroing image on SetImage UseState
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const image: any = e.target.files ? e.target.files[0] : null;
-    setFile(image ? image : null);
+    if (e.target.files?.length && e.target.files.length) {
+      const images = Array.from(e.target.files);
+      setFile(images);
+    }
   };
 
-  // console.log(file);
   // For creating subscription to chat
   useEffect(() => {
-    console.log(user_id);
-    cable.subscriptions.create(
+    console.log(recipient_id);
+    const subscription = cable.subscriptions.create(
       {
         channel: "ChatsChannel",
         reciever_id: user_id,
@@ -82,42 +80,53 @@ export default function Component() {
       {
         // When Server send some data
         received: (data: any) => {
-          // console.log(data);
           setReceivingMessage((state: any) => [...state, data]);
         },
       }
     );
+    return () => {
+      // Unsubscribe when component unmounts
+      subscription.unsubscribe();
+    };
   }, [recipient_id, user_id]);
 
   console.log(receivingMessage);
   console.log(file);
 
   return (
-    <div className="grid grid-cols-[300px_1fr] h-screen static">
+    <div className="flex items-start gap-1">
       <SideBar />
-      <div className="flex flex-col h-full ">
-        <ChatHistory />
-        <div className="flex-1 p-4 space-y-4">
-          {/* Sender messages (right-aligned) */}
-          {messages.map((message: any, index: number) => (
-            <SenderChatMessage
-              message={message.text}
-              index={index}
-              image={""}
-            />
-          ))}
-          {/* Receiver messages (left-aligned) */}
-          {receivingMessage.map((message: any, index: number) => (
-            <RecieverChatMessage
-              message={message.message}
-              index={index}
-              image={message.image.image}
-            />
-          ))}
+
+      <div className="flex flex-col gap-10 flex-1 pt-24">
+        <div className="flex flex-col">
+          <ChatHeader />
+          <ChatHistory />
+          <div className="flex-1 p-28 space-y-4">
+            {/* Receiver messages */}
+            {receivingMessage.map((message: any, index: number) => {
+              if (message.sender_id == user_id) {
+                return (
+                  <SenderChatMessage
+                    message={message.message}
+                    index={index}
+                    image={message.image.image_urls}
+                  />
+                );
+              } else if (message.reciever_id == user_id) {
+                return (
+                  <RecieverChatMessage
+                    message={message.message}
+                    index={index}
+                    image={message.image.image_urls}
+                  />
+                );
+              }
+            })}
+          </div>
         </div>
 
         {/* Message input and send button */}
-        <div className="px-4 pt-4 mb-2 sm:mb-0 fixed bottom-0 w-9/12">
+        <div className="px-4 pt-4 w-9/12 bottom-0 fixed">
           <div className="relative flex">
             <span className="absolute inset-y-0 flex items-center">
               <button
@@ -151,6 +160,8 @@ export default function Component() {
                   placeholder="file uploader"
                   type="file"
                   onChange={handleFile}
+                  accept=".png, .jpg, .jpeg"
+                  multiple
                 />
               </div>
             </div>

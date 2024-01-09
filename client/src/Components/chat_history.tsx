@@ -24,6 +24,8 @@ const ChatHistory = () => {
     chatHistory();
   }, [user_id, recipient_id]);
 
+  // console.log(ChatHistory);
+
   return (
     <div>
       {ChatHistory.map((chatMessage: any, index: number) => {
@@ -32,7 +34,7 @@ const ChatHistory = () => {
             <SenderChatMessage
               message={chatMessage.message}
               index={index}
-              image={chatMessage.image}
+              image={chatMessage.image_urls}
             />
           );
         } else if (chatMessage.reciever_id == user_id) {
@@ -40,7 +42,7 @@ const ChatHistory = () => {
             <RecieverChatMessage
               message={chatMessage.message}
               index={index}
-              image={chatMessage.image}
+              image={chatMessage.image_urls}
             />
           );
         }
