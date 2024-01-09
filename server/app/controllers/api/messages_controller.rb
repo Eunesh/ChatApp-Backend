@@ -3,7 +3,6 @@ class Api::MessagesController < ApplicationController
   # Post /create_message
   def create_message
     @message = Messg.new(message_params)
-
     if @message.save
       render json: @message, status: :created
     else
@@ -20,6 +19,6 @@ class Api::MessagesController < ApplicationController
   private
 
   def message_params
-    params.permit(:message, :sender_id, :reciever_id, :image)
+    params.permit(:message, :sender_id, :reciever_id, images: [])
   end
 end

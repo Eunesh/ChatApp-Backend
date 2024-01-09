@@ -23,6 +23,16 @@ class Api::UsersController < ApplicationController
     @user = User.new
   end
 
+  # GET /users/:id
+  def show
+    @user = User.find_by(id: params[:id])
+    if @user
+      render json: @user.name, status: :ok
+    else
+      render json: 'Sorry User not found', status: :conflict
+    end
+  end
+
   private
 
   def user_params
