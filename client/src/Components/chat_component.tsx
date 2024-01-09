@@ -92,6 +92,7 @@ export default function Component() {
 
   console.log(receivingMessage);
   console.log(file);
+  console.log(user_id);
 
   return (
     <div className="flex items-start gap-1">
@@ -112,7 +113,7 @@ export default function Component() {
                     image={message.image.image_urls}
                   />
                 );
-              } else if (message.reciever_id == user_id) {
+              } else if (message.sender_id == recipient_id) {
                 return (
                   <RecieverChatMessage
                     message={message.message}
