@@ -17,8 +17,6 @@ export default function Component() {
 
   const [inputValue, setInputValue] = useState("");
 
-  const [messages, setMessages] = useState<any>([]);
-
   const [receivingMessage, setReceivingMessage] = useState<any>([]);
 
   const recipient_id: any = localStorage.getItem("recipient_id");
@@ -43,18 +41,12 @@ export default function Component() {
     file.forEach((file) => {
       fd.append("images[]", file);
     });
-    if (inputValue.trim() !== "") {
-      const newMessage = {
-        text: inputValue,
-      };
-      setMessages([...messages, newMessage]);
-      setInputValue("");
-    }
-
+    setInputValue("");
     try {
       const res = await http_for_files.post("/create_message", fd);
-      if (res.status === 200) {
-        setFile([]);
+      if (res.status == 200) {
+        console.log("created");
+        // setFile([]);
       }
     } catch {
       alert("Please dont Leaver your Message Field empty");

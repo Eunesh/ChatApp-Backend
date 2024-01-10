@@ -10,6 +10,8 @@ const SideBar = () => {
 
   const [users, setUsers] = useState<any>([]);
 
+  const [loginUser, setLoginuser] = useState("");
+
   async function ClickLogout() {
     try {
       const res = await http.delete("/logout");
@@ -27,12 +29,21 @@ const SideBar = () => {
 
   function Recieve(id: string) {
     localStorage.setItem("recipient_id", id);
-    location.reload();
+    navigate("/chat");
   }
 
   const others_users_except_yourself: any = users.filter(
     (user: any) => user.id != user_id
   );
+
+  useEffect(() => {
+    const login_user: any = users.filter((user: any) => user.id == user_id); // For login user
+
+    // Check if login_user is not empty before accessing properties
+    if (login_user.length > 0) {
+      setLoginuser(login_user[0].name);
+    }
+  }, [users, user_id]);
 
   // For getting all the user data
   useEffect(() => {
@@ -53,6 +64,10 @@ const SideBar = () => {
     <div className="h-screen relative w-64 border-r dark:border-gray-700">
       <aside className="bg-white dark:bg-gray-9502 p-4 fixed h-full">
         <div className="space-y-4">
+          <h1 className="text-2xl font-extrabold dark:text-white font-mono">
+            {loginUser}
+            <span className="text-green-500 ml-2">●</span>
+          </h1>
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold">Contacts</h2>
           </div>
