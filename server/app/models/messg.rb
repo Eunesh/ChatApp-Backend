@@ -1,7 +1,7 @@
 class Messg < ApplicationRecord
   belongs_to :sender, class_name: 'User'
   belongs_to :reciever, class_name: 'User'
-  has_many_attached :images # for image
+  has_many_attached :images # for images
   after_create_commit :broadcaster
   validates :message, presence: true, unless: -> { images.present? }
 

@@ -11,11 +11,12 @@ class Api::LoginsController < ApplicationController
 
     return render json: { error: 'Unconfirmed account' }, status: :not_acceptable unless @user.confirmed?
 
-    created_jwt = encode(@user.id.to_s)
+    created_jwt = Jwt::JwtService.encode(@user.id.to_s)
 
     cookies.signed[:user_jwt] = { value: created_jwt, httponly: true } # Sending httponly cookie
 
     render json: { user: 'User is Valid' }, status: :ok
+
   end
 
   private
