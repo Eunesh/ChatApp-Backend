@@ -6,11 +6,11 @@ class User < ApplicationRecord
 
   has_secure_password # For hashing password with bcrypt on password_digest column
 
-  before_save :downcase_email # For downcasing email before saving in database
+  before_create :downcase_email # For downcasing email before saving in database
 
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, presence: true, uniqueness: true
 
-  validates :password, presence: true, length: { minimum: 8 }
+  validates :password, presence: true, length: { minimum: 8 }, on: :create
 
   after_create :generate_otp
 

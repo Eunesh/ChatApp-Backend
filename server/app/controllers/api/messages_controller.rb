@@ -12,7 +12,7 @@ class Api::MessagesController < ApplicationController
 
   # GET /specific_message/:sender/:receiver
   def specific_message
-    messages = Messg.find_messages(params[:sender], params[:receiver])
+    messages = Messg.includes(images_attachments: :blob).find_messages(params[:sender], params[:receiver])
     render json: messages, status: :ok
   end
 
