@@ -1,12 +1,6 @@
 class Api::OtpsController < ApplicationController
   before_action :set_user, only: %i[verify_otp reload_otp]
 
-  # GET /otps
-  def index
-    @otp = Otp.all
-    render json: @otp
-  end
-
   # POST /verify_otp
   def verify_otp
     if @user.otp_key == otp_params[:otp] && @user.expire_date_checker(@user.expired_at)

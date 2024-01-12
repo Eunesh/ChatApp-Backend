@@ -18,11 +18,6 @@ class Api::UsersController < ApplicationController
     end
   end
 
-  # GET  /users/new
-  def new
-    @user = User.new
-  end
-
   # GET /users/:id
   def show
     @user = User.find_by(id: params[:id])

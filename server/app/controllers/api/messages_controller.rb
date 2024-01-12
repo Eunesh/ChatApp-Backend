@@ -1,7 +1,7 @@
 class Api::MessagesController < ApplicationController
-  before_action :authenticate_user, only: %i[create_message]
-  # Post /create_message
-  def create_message
+  before_action :authenticate_user, only: %i[create specific_message]
+  # Post /create
+  def create
     @message = Messg.new(message_params)
     if @message.save
       render json: @message, status: :created
@@ -12,6 +12,7 @@ class Api::MessagesController < ApplicationController
 
   # GET /specific_message/:sender/:receiver
   def specific_message
+    # includes(images_attachments: :blob) for eager loading images
     messages = Messg.includes(images_attachments: :blob).find_messages(params[:sender], params[:receiver])
     render json: messages, status: :ok
   end
