@@ -5,6 +5,7 @@ interface propsType {
 }
 
 const RecieverChatMessage = (props: propsType) => {
+  const reciever_name = localStorage.getItem("reciever_name");
   return (
     <div key={props.index} className="flex items-end justify-start mb-4">
       <div className="flex flex-col space-y-2 text-left max-w-xs mx-2 order-1 items-start group">
@@ -25,7 +26,7 @@ const RecieverChatMessage = (props: propsType) => {
             ))}
         </div>
         <span className="text-sm text-gray-500 hidden group-hover:block">
-          Jane Doe
+          {reciever_name}
         </span>
       </div>
     </div>

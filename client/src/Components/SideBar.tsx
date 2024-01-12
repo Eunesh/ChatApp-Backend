@@ -80,6 +80,9 @@ const SideBar = () => {
               >
                 <Avatar className="h-10 w-10"></Avatar>
                 <span className="font-medium">{contact.name}</span>
+                {contact.online && (
+                  <span className="text-green-500 ml-2">●</span>
+                )}
               </div>
             ))}
             <div className="flex items-center space-x-3">

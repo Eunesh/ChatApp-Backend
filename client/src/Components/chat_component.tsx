@@ -1,4 +1,4 @@
-import { Button, Input } from "@mui/material";
+import { Input } from "@mui/material";
 import useAuthChecker from "../Hook/useAuthChecker";
 import { SetStateAction, useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../GlobalContext";
@@ -43,10 +43,10 @@ export default function Component() {
     });
     setInputValue("");
     try {
-      const res = await http_for_files.post("/create_message", fd);
-      if (res.status == 200) {
+      const res = await http_for_files.post("/messages", fd);
+      if (res.status == 201) {
         console.log("created");
-        // setFile([]);
+        setFile([]);
       }
     } catch {
       alert("Please dont Leaver your Message Field empty");
@@ -63,11 +63,9 @@ export default function Component() {
 
   // For creating subscription to chat
   useEffect(() => {
-    console.log(recipient_id);
     const subscription = cable.subscriptions.create(
       {
         channel: "ChatsChannel",
-        reciever_id: user_id,
       },
       {
         // When Server send some data
@@ -80,11 +78,11 @@ export default function Component() {
       // Unsubscribe when component unmounts
       subscription.unsubscribe();
     };
-  }, [recipient_id, user_id]);
+  }, []);
 
   console.log(receivingMessage);
   console.log(file);
-  console.log(user_id);
+  // console.log(user_id);
 
   return (
     <div className="flex items-start gap-1">
@@ -94,10 +92,11 @@ export default function Component() {
         <div className="flex flex-col">
           <ChatHeader />
           <ChatHistory />
-          <div className="flex-1 p-28 space-y-4">
+          <div className="flex-1 pb-28">
             {/* Receiver messages */}
             {receivingMessage.map((message: any, index: number) => {
               if (message.sender_id == user_id) {
+                console.log(message);
                 return (
                   <SenderChatMessage
                     message={message.message}
@@ -106,6 +105,7 @@ export default function Component() {
                   />
                 );
               } else if (message.sender_id == recipient_id) {
+                console.log(message);
                 return (
                   <RecieverChatMessage
                     message={message.message}
@@ -119,7 +119,7 @@ export default function Component() {
         </div>
 
         {/* Message input and send button */}
-        <div className="px-4 pt-4 w-9/12 bottom-0 fixed">
+        <div className="px-4 pt-4 w-9/12 bottom-3 fixed">
           <div className="relative flex">
             <span className="absolute inset-y-0 flex items-center">
               <button
@@ -135,16 +135,16 @@ export default function Component() {
               value={inputValue}
               onChange={handleInputChange}
             />
-            <div className="absolute right-0 items-center inset-y-0 hidden sm:flex">
-              <Button
+            <div className="items-center inset-y-0 sm:flex absolute bottom-0 right-3 gap-3">
+              <button
                 onClick={handleSendClick}
                 className="inline-flex items-center justify-center rounded-full transition duration-500 ease-in-out text-blue-500 hover:bg-blue-100 focus:outline-none"
               >
                 <SendIcon className="h-6 w-6" />
-              </Button>
+              </button>
               <div>
                 <label htmlFor="file_uploader" className="">
-                  <FileInputIcon className="h-9 w-6 hover:bg-blue-100 transition duration-500 ease-in-out rounded-xl" />
+                  <FileInputIcon className="h-9 w-6 hover:bg-blue-100 transition duration-500 ease-in-out rounded-xl cursor-pointer" />
                 </label>
                 <input
                   className="hidden"

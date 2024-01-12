@@ -6,6 +6,7 @@ const CableApp: { cable: ReturnType<typeof createConsumer> } = {
 };
 
 export const GlobalContext = createContext<any>({});
+
 const GlobalContextProvider = ({ children }: any) => {
   return (
     <GlobalContext.Provider value={{ cable: CableApp.cable }}>

@@ -12,6 +12,7 @@ const ChatHeader = () => {
         const res = await http.get(`/users/${recipient_id}`);
         if (res.status === 200) {
           setRecieverName(res.data);
+          localStorage.setItem("reciever_name", res.data);
         }
       } catch (err) {
         console.log(err);
