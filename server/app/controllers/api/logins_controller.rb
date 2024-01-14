@@ -16,7 +16,6 @@ class Api::LoginsController < ApplicationController
     cookies.signed[:user_jwt] = { value: created_jwt, httponly: true } # Sending httponly cookie
 
     render json: { user: 'User is Valid' }, status: :ok
-
   end
 
   private

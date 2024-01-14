@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_11_062530) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_13_091152) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -48,6 +48,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_11_062530) do
     t.bigint "reciever_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "images", default: [], array: true
     t.index ["reciever_id"], name: "index_messgs_on_reciever_id"
     t.index ["sender_id"], name: "index_messgs_on_sender_id"
   end
